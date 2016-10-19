@@ -1,55 +1,58 @@
+# Gson Money Type Adapter
+
 [![Build Status](https://travis-ci.org/zalando-incubator/gson-money-typeadapter.svg?branch=master)](https://travis-ci.org/zalando-incubator/gson-money-typeadapter)
 [![codecov](https://codecov.io/gh/zalando-incubator/gson-money-typeadapter/branch/master/graph/badge.svg)](https://codecov.io/gh/zalando-incubator/gson-money-typeadapter)
-*Clear documentation is critical to the success of your project. This checklist is meant to help you cover all your bases. Not every section/subsection will be relevant to your project; pick and choose what is. Inspired by READMEs of very successful projects like etcd.*
 
-Please copy-paste this into a new document and save as you build your READMEs. You could also use [this similar checklist](https://github.com/cfpb/open-source-project-template).
 
-###Project name/Intro
+The _Gson Money TypeAdapter_ supports the serialization and deserialization of [JavaMoney](https://github.com/JavaMoney) data types by [GSON](https://github.com/google/gson).
 
-- Describe very briefly but clearly what the project does.
-- State if it is out-of-the-box user-friendly, so it’s clear to the user.
-- List its most useful/innovative/noteworthy features.
-- State its goals/what problem(s) it solves.
-- Note and briefly describe any key concepts (technical, philosophical, or both) important to the user’s understanding.
-- Link to any supplementary blog posts or project main pages.
-- Note its development status.
-- Include badges.
-- If possible, include screenshots and demo videos.
+### Serialization
 
-###Core Technical Concepts/Inspiration
+The _Gson Money TypeAdapter_ is able to serialize the following data types:
 
-- Why does it exist?
-- Frame your project for the potential user. 
-- Compare/contrast your project with other, similar projects so the user knows how it is different from those projects.
-- Highlight the technical concepts that your project demonstrates or supports. Keep it very brief.
-- Keep it useful.
+| Data Types | JSON |
+|:-----------:|:------:|
+|   `javax.money.CurrencyUnit` | `"EUR"`  |
+|   `javax.money.MonetaryAmount` | `{"amount": 12.34, "currency": "EUR"}`  |
 
-###Getting Started/RequirementsPrerequisites/Dependencies
-Include any essential instructions for:
-- Getting it
-- Installing It
-- Configuring It
-- Running it
 
-###More Specific Topics (+ sample sub-categories)
-- Versioning: Services, APIs, Systems
-- Common Error Messages/related details
-- Tests
+### Deserialization
 
-###Contributing
-- Contributor Guidelines
-- Code Style/Reqts
-- Format for commit messages
-- Thank you (name contributors)
+The _Gson Money TypeAdapter_ uses by default the `Monetary.getDefaultAmountFactory()` during _deserialization_. Also,
+ it supports all the default `MonetaryAmount` implementations.
 
-### TODO
-- Next steps
-- Features planned
-- Known bugs (shortlist)
+- `org.javamoney.moneta.FastMoney`
+- `org.javamoney.moneta.Money`
+- `org.javamoney.moneta.RoundedMoney`
 
-### Contact
-- Email address
-- Google Group/mailing list (if applicable)
-- IRC or Slack (if applicable)
+## Requirements
+- Java 7 or higher
+- Gson
+- JavaMoney
 
-###License
+## Installation
+
+Add the following dependency to the project:
+
+```xml
+<dependency>
+    <groupId>org.zalando</groupId>
+    <artifactId>gson-money-typeadapter</artifactId>
+    <version>${gson-money-typeadapter.version}</version>
+</dependency>
+```
+
+## How to Use
+
+Register the class `MoneyTypeAdapterFactory` to the `GsonBuilder` as follows:
+
+```java
+Gson gson = new GsonBuilder().registerTypeAdapterFactory(new MoneyTypeAdapterFactory()).create();
+```
+
+In case that a custom implementation of `MonetaryAmountFactory<T>` exists, register `MoneyTypeAdapterFactory` as:
+
+```java
+MonetaryAmountFactory customMonetaryAmountFactory = new customMonetaryAmountFactory();
+
+Gson gson = new GsonBuilder().registerTypeAdapterFactory(new MoneyTypeAdapterFactory(customMonetaryAmountFactory)).create();
