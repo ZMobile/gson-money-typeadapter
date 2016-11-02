@@ -11,7 +11,7 @@ The _Gson Money TypeAdapter_ supports the serialization and deserialization of [
 The _Gson Money TypeAdapter_ is able to serialize the following data types:
 
 | Data Types | JSON |
-|:-----------:|:------:|
+|-----------|------|
 |   `javax.money.CurrencyUnit` | `"EUR"`  |
 |   `javax.money.MonetaryAmount` | `{"amount": 12.34, "currency": "EUR"}`  |
 
